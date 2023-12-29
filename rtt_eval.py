@@ -3,13 +3,15 @@ import sys, time
 import pandas as pd
 import ccxt.pro as ccxtpro
 
+pd.set_option('display.float_format', lambda x: '%.2f' % x)
+
 
 async def eval_rtt_by_ticker(exchanges):
     exs = [getattr(ccxtpro, exchange)() for exchange in exchanges]
     ex_rtts = {}
     for ex in exs:
         print("eval {}...".format(ex.id))
-        await ex.load_markets()
+        await ex.fetch_ticker("BTC/USDT")
         await asyncio.sleep(5)
         rtts = []
         for i in range(50):
